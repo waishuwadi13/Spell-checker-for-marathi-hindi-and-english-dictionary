@@ -1,0 +1,93 @@
+Spell Checker System
+
+This program is a high performance spell correction and auto-suggestion system.It uses Numpy for vectorized filtering and the Levenshtein Distance algorithm to find the most relevant word suggestions from a dictionary.
+
+Object: The objective of this program is : 
+         1. To build fast and efficient spell-checking system.
+         2. To reduce computation time using optimized filtering.
+         3. To implement Levenshtein Distance efficiently.
+         4. To demonstrate practical use of Numpy in real-world problems.
+
+Python version: Python 3.12.3
+
+Numpy version : 2.3.2
+
+Python Environment Setup: 1.Create virtual environment : 
+                              - python3 -m venv myenv  
+                          2. Activate the environment : 
+                              - source myenv/bin/activate
+                          3. for deactivation : 
+                               - deactivate
+
+Input file : words_alpha.txt  (this file contains a list of 370000 valid english words. )
+
+Working:
+
+[A].main(): 
+     - Checks if index file "spell_index.npz" exists
+     - If not :  
+          - loads words from file.
+          - build index
+     - If yes :load index
+     - Take user input 
+     - Call get_suggestions() to generate result.
+          
+[B].load_words(file_path): 
+     - Read words from input file.
+     - Convert all words to lowercase.
+     - Remove empty lines.
+     - Returns a clean list of words.
+ 
+[C].build_index(words):
+     - Creates two main structure:
+          - letter count 
+          - words length
+     - Each word is represented as :
+          - Count of letters(a-z)
+          - Length of word
+     - This helps in fast filtering.
+
+[D].save_index():
+     - Saves processed data into a compressed .npz file.
+     - Avoid re-computation every time program runs.
+ 
+[E].load_index():
+     - returns : 
+          - words
+          - counts
+          - lengths
+ 
+[F]. match(w1_set,w2_set,max_dist):
+     - Compress sets of characters
+     - Checks if enough character are common
+     - Helps eliminate unrelated words quickly
+     
+[G].edit_distance():
+     - Implement optimized edit distance
+     - Stop early if distance exceeds limit. 
+     
+[H]. get_suggestions(query,words,counts,lengths,num):
+     1.Pre-process input words
+     2.Compute:
+          - create letter count(q_counts) to store how many times each character appears in query.
+          - creates set(q_set) to store unique character of query word.
+          - calculates length(q_len).
+     3.List called best[] initialized to store suggestions.
+     4.A starting edit distance (max_edit) is set based on length of the words.
+       An upper limit is also defined so search does not go too far. 
+     5.The function runs a loop until:
+          - required suggestions are found.
+          - maximum edit distance limit is reached.
+     6.Only words with acceptable length difference are selected.
+     7.l1_dist removes words with very different character count.
+     8.If too many words are present,only top 1000 are selected.
+     9.Edit distance is calculated only for filtered words.
+     10.If enough suggestions are not found ,edit distance is increased gradually.
+  
+ [I].Conclusion :
+     - input query : ubject
+     - output: abject (distance 1)
+               object (distance 1)
+               subject (distance 1)
+               adject (distance 2)
+               deject (distance 2)
